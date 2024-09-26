@@ -1,3 +1,5 @@
+"use client";
+
 import Navbar from "@/components/Navbar";
 import Testimonial from "./pages/testimonial/page";
 import AboutMe from "./pages/aboutMe/page";
@@ -8,9 +10,19 @@ import Logo2 from "../public/express-svgrepo-com.svg";
 import Logo3 from "../public/mysql-svgrepo-com.svg";
 import Logo4 from "../public/light-prisma-svgrepo-com.svg";
 import Image from "next/image";
+import { useState } from "react";
+
+// Define interface for logo
+interface LogoData {
+  id: number;
+  imageUrl: string;
+  title: string;
+}
 
 export default function Home() {
-  const logos = [
+  const [selectedLogo, setSelectedLogo] = useState<number | null>(null); // Manage the clicked state
+
+  const logos: LogoData[] = [
     {
       id: 1,
       imageUrl: Logo, // Directly use the imported image reference
@@ -38,6 +50,10 @@ export default function Home() {
     },
   ];
 
+  const handleClick = (id: number) => {
+    setSelectedLogo(id); // Set the selected logo id when clicked
+  };
+
   return (
     <>
       <Navbar />
@@ -47,10 +63,10 @@ export default function Home() {
             {/* Avatar */}
             <div className="avatar flex justify-end items-end mr-20">
               <div className="w-2/4 sm:w-1/3 md:w-44 rounded-full">
-                <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" className="w-full h-auto rounded-full " alt="Avatar" />
+                <Image src="https://i.pinimg.com/736x/26/c9/73/26c973f54ad473a4f4dfb11f8930f14d.jpg" width={300} height={300} className="w-full h-auto rounded-full" alt="Avatar" />
               </div>
             </div>
-            <div className="">
+            <div>
               {/* Title */}
               <div>
                 <h1 className="text-3xl">Charles</h1>
@@ -68,7 +84,15 @@ export default function Home() {
             </div>
             <div className="flex flex-wrap justify-center gap-4 mt-6">
               {logos.map((logo) => (
-                <div key={logo.id} className="flex flex-col items-center">
+                <div
+                  key={logo.id}
+                  className={`flex flex-col items-center p-4 rounded-lg cursor-pointer transition-all duration-300 ${
+                    selectedLogo === logo.id
+                      ? "bg-gray-800 text-white" // Dark background when selected
+                      : "bg-transparent text-black hover:bg-white/40" // 40% white background on hover
+                  }`}
+                  onClick={() => handleClick(logo.id)}
+                >
                   <Image src={logo.imageUrl} width={50} height={50} alt={logo.title} />
                   <h4>{logo.title}</h4>
                 </div>
@@ -84,17 +108,3 @@ export default function Home() {
     </>
   );
 }
-
-// {/* Avatar */}
-// <div className="avatar flex justify-center items-center">
-// <div className="w-44 rounded-full">
-//   <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
-// </div>
-// </div>
-// {/* Description */}
-// <div>
-// <div className=" justify-center items-center gap-3 my-60">
-//   <h1 className="text-2xl">Junior Fullstack Developer</h1>
-//   <h1 className="text-2xl">Charles</h1>
-// </div>
-// </div>
